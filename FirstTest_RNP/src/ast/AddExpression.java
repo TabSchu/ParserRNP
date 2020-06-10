@@ -1,7 +1,5 @@
 package ast;
 
-import java.math.BigDecimal;
-
 public class AddExpression extends Expression {
 
 	private Expression fLeft;
@@ -17,20 +15,23 @@ public class AddExpression extends Expression {
 	 return fRight;
 	 } 
 	
+	
 	public AddExpression( Expression aLeft, Expression aRight )
 	 {
 	 fLeft = aLeft;
 	 fRight = aRight;
 	 } 
 	
-	
-	//public String toString() {
-//		return fLeft.toString() + fRight.toString() + "+";
-//	}
 
 	@Override
 	public String evaluate() {
 		return fLeft.evaluate() + fRight.evaluate() + " + ";
+		// 5 + 3
+		// 5 3 +
+		
+		// 5 + (1 + 2)
+		// 5 + ( 1 2 +)
+		// 5 1 2 + +
 	}
 
 }

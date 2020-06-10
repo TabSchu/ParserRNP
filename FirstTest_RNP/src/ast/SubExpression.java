@@ -28,7 +28,6 @@ public class SubExpression extends Expression {
 	@Override
 	public String evaluate() {
 		return fLeft.evaluate() + fRight.evaluate() + " - ";
-		//return fLeft.evaluate().subtract( fRight.evaluate() ); 
 	}
 
 }

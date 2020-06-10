@@ -1,7 +1,5 @@
 package ast;
 
-import java.math.BigDecimal;
-
 public class UnaryMinusExpression extends Expression {
 
 	private Expression fExpression;
@@ -23,12 +21,15 @@ public class UnaryMinusExpression extends Expression {
 	
 	@Override
 	public String evaluate() {
-		// -5 --> value =5 --> "0 5 - "
-		//value = fExpression.evaluate()
 		 return " 0 "+ fExpression.evaluate() +" - ";
-		// return " 0 "+" 5 "+" - "; //fExpression.evaluate().multiply( new BigDecimal("-1") ); 
-	// does not work:	return fExpression.evaluate() * -1 ); 
-		 // float/double would work
 	}
-
+	// - 3 
+	// 0 - 3
+	// 0 3 -
+	
+	// - (1 + 2)
+	// - (1 2 +)
+	// 0 - (1 2 +)
+	// 0 (1 2 +) -
+	// 0 1 2 + -
 }

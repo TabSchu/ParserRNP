@@ -1,7 +1,5 @@
 package ast;
 
-import java.math.BigDecimal;
-
 public class NumberExpression extends Expression {
 
 	private String fValue;
@@ -16,6 +14,5 @@ public class NumberExpression extends Expression {
 		
 		return fValue+" ";
 	}
-
 
 }

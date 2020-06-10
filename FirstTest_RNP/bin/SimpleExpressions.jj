@@ -1,8 +1,8 @@
 options
 {
-static = false;
-output_directory = "parser";
-debug_parser = true;
+	static = false;
+	output_directory = "parser";
+	// debug_parser = true;
 }
 PARSER_BEGIN(SimpleExpressions)
 
@@ -26,55 +26,48 @@ TOKEN :
 	< Number : ((["0"-"9"])+ ("." (["0"-"9"])*)?) | ((["0"-"9"])* "." (["0"-"9"])+) >
 }
 
+
+ 
+ 
 Expression Expression() :
 {
 	Expression e;
 }
 {
-	e = LarsExpression() ";" // "4+5-6;"   -> "4+5-6"
+	e = AddFuncExpression() ";" 
 	{
 		return e;
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
-/////////////////////////!!!!!!!RNP!!!!!!////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
- 
 
-Expression LarsExpression() :
+
+Expression AddFuncExpression() :
 {
 	Expression left, right;
 }
 {
-	// MulExpression (“+” MulExpression)*
-	//  | MulExpression (“-” MulExpression)*
-	
-	////  MulExpression() (("+" | "-") MulExpression())*
-	left = YuliaExpression() //"4+5-6" ---> "4" "+5-6"
+
+	left = MulFuncExpression() 
 	  
 	 	(
 	 	
-	 		"+" right = YuliaExpression() { left = new AddExpression( left, right );}
+	 		"+" right = MulFuncExpression() { left = new AddExpression( left, right );}
 	 	| 	
-	 		"-" right = YuliaExpression() { left = new SubExpression( left, right );}
+	 		"-" right = MulFuncExpression() { left = new SubExpression( left, right );}
 	 	)*
 	 	{
 	 		return left;
 	 	}
 }
 
-Expression YuliaExpression() :
+Expression MulFuncExpression() :
 {
 	Expression left, right;
 }
 {
-	// PrimaryExpression (“*” PrimaryExpression)*
-	//  PrimaryExpression (“/” PrimaryExpression)*
-	
-	////  PrimaryExpression() (("*" | "/") PrimaryExpression())*
-	left = PrimaryExpression() //"4+5-6" ---> "4" "+5-6"
+
+	left = PrimaryExpression() 
 	  
 	 	(
 	 	
@@ -89,56 +82,27 @@ Expression YuliaExpression() :
 
 
 
-
-
-
-
-
-
-
 Expression PrimaryExpression() :
 {
 	Expression e;
 	Token n;
 }
-{	/*{
-	 "(" Expression() ")"
-	|
-	 "-" Primary()
-	|
-	 <Number> */
+{	
 	n = <Number>
 	{
-		return new NumberExpression( n.image);
+		return new NumberExpression( n.image); // returns Number
 	}
 	| 
-	 "-" e = PrimaryExpression()// ")" //PrimaryExpression() 
+	 "-" e = PrimaryExpression()
 	{
-		return new UnaryMinusExpression(e);
+		return new UnaryMinusExpression(e); // returns UnaryMinus 
+											// e.g. - 3 --> 0 3 -
 	}
 	|
-	"(" e = LarsExpression() ")" //PrimaryExpression() (2)  (3+5)
+	"(" e = AddFuncExpression() ")" // calls AddFuncExpression, 
+									// returns evaluated result
 	{
 		return e;
-	}
-	
-	/*
-	
-	
-	"-" e = Primary() ")"
-	{
-		return new UnaryMinusExpression(e);
-	}
-	
-	
-	
-	
-		| 
-	 "-" e = PrimaryExpression() //PrimaryExpression() 
-	{
-		return e;
-	}*/
-	
-	
+	}	
 } 
 
